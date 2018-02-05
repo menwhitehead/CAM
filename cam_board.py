@@ -44,7 +44,20 @@ class Board:
         del self.by_full_key[(x,y)]
 
     def getCell(self, x, y):
-        return self.by_full_key((x, y))
+        if (x, y) in self.by_full_key:
+            return self.by_full_key[(x, y)]
+        else:
+            return 0 # dead cell
+
+    def getAllCells(self):
+        return self.by_full_key.keys()
+
+    def __str__(self):
+        result = ""
+        result += str(self.by_x) + "\n"
+        result += str(self.by_y) + "\n"
+        result += str(self.by_full_key)
+        return result
 
 
 
