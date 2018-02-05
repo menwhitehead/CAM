@@ -6,26 +6,21 @@ class Engine:
 
     DEFAULT_COLOR = (255,0,0)  # Red
 
-    # All the state is maintained in a single hashmap
-    # Only non-zero states are maintained (sparse representation)
-    board = {}
-
-    # The mapping between states and colors
-    # Non-zero unmapped states are given a default color
-    color_map = {}
-
     def __init__(self):
-        pass
+
+        # All the state is maintained in a single hashmap
+        # Only non-zero states are maintained (sparse representation)
+        self.board = {}
+
+        # The mapping between states and colors
+        # Non-zero unmapped states are given a default color
+        self.color_map = {}
 
     def getColor(self, state):
         if state in self.color_map:
             return self.color_map[state]
         else:
             return self.DEFAULT_COLOR
-
-    def getBounds(self):
-        "Return the coordinates for the bounding box of the non-zero cells"
-        pass
 
     def saveImage(self, filename, width=600, height=600):
         "Save the current state of the board into an image file"
