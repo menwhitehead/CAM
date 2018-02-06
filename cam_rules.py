@@ -2,13 +2,15 @@
 
 class Rule:
 
-    def __init__(self, old, neighborhood, new):
+    def __init__(self, neighborhood, new):
         self.neighborhood = neighborhood
-        self.old = old
         self.new = new
 
     def __eq__(self, other):
-        return self.old == other.old and self.neighborhood == other.neighborhood
+        for i in range(len(self.neighborhood)):
+            if self.neighborhood[i] != -1 and self.neighborhood[i] != other.neighborhood[i]:
+                return False
+        return True
 
 
 class Rules:
@@ -21,8 +23,8 @@ class Rules:
     def addRule(self, rule):
         self.rules.append(rule)
 
-    def getRuleMatch(self, cell, neighborhood):
-        possible_rule = Rule(cell, neighborhood, None)
+    def getRuleMatch(self, neighborhood):
+        possible_rule = Rule(neighborhood, None)
         for rule in self.rules:
             if rule == possible_rule:
                 return rule.new
@@ -33,9 +35,9 @@ class Rules:
         f = open(filename, 'r')
         for line in f:
             if line.strip() != '' and line.strip()[0] != '#':
-                tokens = line.split()
+                tokens = map(int, line.split())
                 # old, n, ne, e, se, s, sw, w, nw, new = tokens  # Assign tokens to variables
-                r = Rule(tokens[0], tokens[1:-1], tokens[-1])
+                r = Rule(tokens[0:-1], tokens[-1])
                 self.addRule(r)
         f.close()
 
