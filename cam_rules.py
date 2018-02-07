@@ -12,6 +12,9 @@ class Rule:
                 return False
         return True
 
+    def __str__(self):
+        return str(self.neighborhood[0]) + " " + str(self.neighborhood[1:])[1:-1].replace(',', ' ') + " " + str(self.new)
+
 
 class Rules:
 

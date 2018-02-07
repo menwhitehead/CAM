@@ -127,12 +127,12 @@ class Engine:
 
 if __name__ == "__main__":
     e = Engine()
-    e.loadConfiguration("test.ca")
-    rules = Rules("test.rules")
+    e.loadConfiguration("test2.ca")
+    rules = Rules("test2.rules")
     color_map = ColorMap("test.cm")
     e.setRules(rules)
     e.setColorMap(color_map)
-    e.saveMovie("test.avi", 3, 0, 0, 20, 20, 3)
+    e.saveMovie("test.mov", 40, 0, 0, 100, 100, 10)
     # e.saveConfiguration("test2.ca")
 
 
