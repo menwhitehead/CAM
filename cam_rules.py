@@ -3,6 +3,7 @@
 class Rule:
 
     def __init__(self, neighborhood, new):
+        neighborhood = map(int, neighborhood)  # ensure integers
         self.neighborhood = neighborhood
         self.new = new
 
@@ -13,24 +14,24 @@ class Rule:
         return True
 
     def __str__(self):
-        return str(self.neighborhood[0]) + " " + str(self.neighborhood[1:])[1:-1].replace(',', ' ') + " " + str(self.new)
+        return str(self.neighborhood[0]) + " " + str(self.neighborhood[1:])[1:-1].replace(',', '') + " " + str(self.new)
 
 
 class Rules:
 
     def __init__(self, filename):
         # Transition rules
-        self.rules = []
+        self.rules = {}
         self.loadRules(filename)
 
-    def addRule(self, rule):
-        self.rules.append(rule)
+    def addRule(self, rule_pattern, new_state):
+        self.rules[rule_pattern] = new_state
 
     def getRuleMatch(self, neighborhood):
-        possible_rule = Rule(neighborhood, None)
-        for rule in self.rules:
-            if rule == possible_rule:
-                return rule.new
+        neighborhood_tuple = tuple(neighborhood)
+        #possible_rule = Rule(neighborhood, None)
+        if neighborhood_tuple in self.rules:
+            return self.rules[neighborhood_tuple]
         return -1
 
     def loadRules(self, filename):
@@ -40,8 +41,8 @@ class Rules:
             if line.strip() != '' and line.strip()[0] != '#':
                 tokens = map(int, line.split())
                 # old, n, ne, e, se, s, sw, w, nw, new = tokens  # Assign tokens to variables
-                r = Rule(tokens[0:-1], tokens[-1])
-                self.addRule(r)
+                #r = Rule(tokens[0:-1], tokens[-1])
+                self.addRule(tuple(tokens[0:-1]), tokens[-1])
         f.close()
 
 

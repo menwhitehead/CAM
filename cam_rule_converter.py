@@ -1,5 +1,6 @@
 
 import itertools
+import copy
 
 from cam_rules import *
 
@@ -25,6 +26,30 @@ class RuleConverter:
         # r = Rule(neighborhood, new)
         # print r
 
+    def generateWildcardRules(self, neighborhood, new_state, starting=0):
+        #r = Rule([old]+list(lst), new)
+        rules = []
+        found_wildcard = False
+        index = 0
+        for token in neighborhood[starting:]:
+            if token[0] == '[':   # a range of possible states
+                found_wildcard = True
+                start_range, end_range = map(int, token[1:-1].split('-'))
+                # print token[1:-1]
+                # print start_range, end_range
+                for i in range(start_range, end_range+1):
+                    new_neighborhood = copy.deepcopy(neighborhood)
+                    new_neighborhood[index] = i
+                    result = self.generateWildcardRules(new_neighborhood, new_state, starting=index+1)
+                    # print type(result)
+                    rules.append(result)
+            index += 1
+        if not found_wildcard:
+            return Rule(neighborhood, new_state)
+        else:
+            return rules
+
+
     def loadRules(self, filename):
         "Load a high-level rules file from the given filename"
         f = open(filename, 'r')
@@ -37,6 +62,16 @@ class RuleConverter:
                     old_state, neighbor_count, new_state = map(int, line[1:].split())
                     # print old_state, neighbor_count, new_state
                     self.generateNeighborCountRule(old_state, neighbor_count, new_state)
+                    #r = Rule(tokens[0:-1], tokens[-1])
+                    #self.addRule(r)
+                elif line[0].lower() == '*':
+                    # print "WILDCARD RULE"
+                    tokens = line[1:].split()
+                    #tokens = map(int, line[1:].split())
+                    # print old_state, neighbor_count, new_state
+                    x = self.generateWildcardRules(tokens[:-1], tokens[-1])
+                    for element in x:
+                        print element
                     #r = Rule(tokens[0:-1], tokens[-1])
                     #self.addRule(r)
         f.close()

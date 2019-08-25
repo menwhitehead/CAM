@@ -105,8 +105,9 @@ class Engine:
         lines = f.readlines()
         for line in lines:
             if line.strip() != '':
-                x, y, state = map(int, line.split())
-                self.board.updateCell(x, y, state)
+                if line[0] != '#':
+                    x, y, state = map(int, line.split())
+                    self.board.updateCell(x, y, state)
 
     def saveConfiguration(self, filename):
         "Save the current state of the board into a config file that can be loaded later"
@@ -132,7 +133,7 @@ if __name__ == "__main__":
     color_map = ColorMap("test.cm")
     e.setRules(rules)
     e.setColorMap(color_map)
-    e.saveMovie("test.mov", 40, 0, 0, 100, 100, 10)
+    e.saveMovie("test.mov", 100, 0, 0, 60, 60, 10)
     # e.saveConfiguration("test2.ca")
 
 
